@@ -11,7 +11,12 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary px-3">
         <div class="container-fluid">
-            <a class="navbar-brand fs-4 fw-bold" href="{{ route('home') }}">Perpustakaan</a>
+                <div class="sidebar-brand-icon">
+            <img src="/assets/images/Logo.png"
+                alt=""
+                style="width: 40px; height: 40px; border-radius: 50%;">
+        </div>
+            <a class="navbar-brand fs-4 fw-bold" href="{{ route('home') }}">MTS TANWIRIYYAH</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems"
                 aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

@@ -9,7 +9,7 @@
                 style="width: 40px; height: 40px; border-radius: 50%;">
         </div>
         <!-- Teks brand -->
-        <div class="sidebar-brand-text mx-3">Perpustakaan</div>
+        <div class="sidebar-brand-text mx-3">MTS TANWIRIYYAH</div>
     </a>
 
     <!-- Divider -->
