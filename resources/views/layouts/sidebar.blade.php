@@ -65,6 +65,19 @@
                 <span>Pengembalian</span>
             </a>
         </li>
+
+          <li class="nav-item {{ request()->routeIs('fines.index*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('fines.index') }}">
+                <i class="fas fa-fw fa-paste"></i>
+                <span>Denda</span>
+            </a>
+        </li>
+          {{-- <li class="nav-item {{ request()->routeIs('admin.returns.*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.returns.index') }}">
+                <i class="fas fa-fw fa-paste"></i>
+                <span>Laporan</span>
+            </a>
+        </li> --}}
     @endif
 
     <!-- Sidebar Toggler (Sidebar) -->

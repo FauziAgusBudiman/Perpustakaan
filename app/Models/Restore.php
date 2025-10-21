@@ -14,11 +14,13 @@ class Restore extends Model
     public $timestamps = false;
 
     public const STATUSES = [
-        'Returned' => 'Telah dikembalikan',
+        'Returned' => 'Buku dikembalikan',
         'Not confirmed' => 'Belum dikonfirmasi',
         'Past due' => 'Terlambat',
-        'Fine not paid' => 'Belum membayar denda',
+        'Fine not paid' => 'Belum Konfirmasi denda ditambah',
+        'Fine paid' => 'Denda telah dibayar dan Buku dikembalikan',
     ];
+
 
     protected $fillable = [
         'returned_at',
@@ -45,4 +47,5 @@ class Restore extends Model
     public function borrow() {
         return $this->belongsTo(Borrow::class);
     }
+    
 }

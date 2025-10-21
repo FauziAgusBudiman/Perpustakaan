@@ -31,6 +31,11 @@ class MemberController extends Controller
             'members' => $members,
         ]);
     }
+            public function show(User $member)
+        {
+            return view('admin.members.show', compact('member'));
+        }
+
 
     public function create()
     {

@@ -41,6 +41,8 @@
 
                                         <button type="submit" class="btn btn-link text-danger p-0 mx-1">Hapus</button>
                                     </form>
+                                    <a href="{{ route('admin.members.show', $member) }}" target="_blank"
+                                        class="btn btn-link p-0 mx-1 text-primary">Cetak Kartu</a>
                                 </td>
                             </tr>
                         @empty

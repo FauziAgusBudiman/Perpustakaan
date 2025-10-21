@@ -7,7 +7,21 @@
                 </div>
             @endif
 
-            <a href="{{ route('admin.books.create') }}" class="btn btn-primary d-block d-sm-inline-block my-3">Tambah</a>
+            <div class="mb-3 d-flex gap-3 align-items-center">
+            <a href="{{ route('admin.books.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah
+            </a>
+
+            <form action="{{ route('admin.books.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2 mb-0 ml-2">
+                @csrf
+                <input type="file" name="file" class="form-control" style="max-width: 270px;" required>
+                <button type="submit" class="btn btn-success ml-2">
+                    <i class="fas fa-file-excel"></i> Import Excel
+                </button>
+            </form>
+        </div>
+
+
 
             <x-admin.search url="{{ route('admin.books.index') }}" placeholder="Cari buku..." />
 
@@ -20,6 +34,7 @@
                             <th>Judul</th>
                             <th>Penulis</th>
                             <th>Penerbit</th>
+                            {{-- <th>No Rak</th> --}}
                             <th>Tahun Terbit</th>
                             <th>Jumlah Tersedia</th>
                             <th>Status</th>
@@ -37,6 +52,7 @@
                                 <td>{{ $book->title }}</td>
                                 <td>{{ $book->writer }}</td>
                                 <td>{{ $book->publisher }}</td>
+                                {{-- <td>{{ $book->rack_number ?? '-' }}</td> --}}
                                 <td>{{ $book->publish_year }}</td>
                                 <td>{{ $book->amount }} buku</td>
                                 <td>
@@ -53,6 +69,8 @@
                                 <td>
                                     <a href="{{ route('admin.books.edit', $book) }}"
                                         class="btn btn-link">Edit</a>
+                                        <a href="{{ route('admin.books.show', $book) }}"
+                                          class="btn btn-link">Cetak Label</a>
 
                                     <form action="{{ route('admin.books.destroy', $book) }}" method="POST"
                                         onsubmit="return confirm('Anda yakin ingin menghapus buku ini?')">
@@ -60,6 +78,7 @@
                                         @method('DELETE')
 
                                         <button type="submit" class="btn btn-link text-danger">Hapus</button>
+                                        
                                     </form>
                                 </td>
                             </tr>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FineController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\BorrowController;
 use App\Http\Controllers\Admin\LibrarianController;
@@ -30,6 +31,19 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/my-books', MyBookController::class)->only('index', 'update');
     Route::post('/my-books/{book}', [MyBookController::class, 'store'])->name('my-books.store');
+    Route::get('books/{book}/print-label', [MyBookController::class, 'show'])->name('admin.books.show');
+    Route::post('/admin/books/import', [MyBookController::class, 'import'])->name('admin.books.import');
+
+    
+    Route::get('/fines', [FineController::class, 'index'])->name('fines.index');
+    Route::patch('/fines/{id}/pay', [FineController::class, 'pay'])->name('fines.pay');
+
+    Route::get('/admin/members/{member}', [MemberController::class, 'show'])
+    ->name('admin.members.show');
+
+    Route::get('returns/export-excel', [RestoreController::class, 'exportExcel'])->name('admin.returns.exportExcel');
+    Route::get('returns/export-pdf', [RestoreController::class, 'exportPdf'])->name('admin.returns.exportPdf');
+   
 
     Route::middleware('superuser')->prefix('/admin')->name('admin.')->group(function () {
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
@@ -46,6 +60,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('/borrows', BorrowController::class)->except('show', 'create', 'store');
 
             Route::resource('/returns', RestoreController::class)->except('show', 'create', 'store');
+            
+            
         });
     });
+
+    Route::put('/returns/{restore}/denda', [RestoreController::class, 'denda'])->name('admin.returns.denda');
 });

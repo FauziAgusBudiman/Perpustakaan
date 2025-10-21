@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Borrow;
+use App\Models\Restore;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -56,6 +57,7 @@ class BorrowController extends Controller
             ->route('admin.borrows.index')
             ->with('success', 'Berhasil mengubah status konfirmasi peminjaman.');
     }
+    
 
     public function destroy(Borrow $borrow)
     {

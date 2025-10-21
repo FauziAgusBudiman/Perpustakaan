@@ -33,16 +33,17 @@
                                 <td>{{ $borrow->borrowed_at->locale('id_ID')->isoFormat('LL') }}</td>
                                 <td>{{ $borrow->duration }} hari</td>
                                 <td>
-                                    @switch($borrow->confirmation)
-                                        @case(true)
-                                            <span class="badge badge-success">Terkonfirmasi</span>
-                                        @break
+                                @if ($borrow->confirmation)
+                                    @if ($borrow->restore && $borrow->restore->status === \App\Models\Restore::STATUSES['Returned'])
+                                        <span class="badge badge-success">Buku Dikembalikan</span>
+                                    @else
+                                        <span class="badge badge-secondary">Buku Dipinjam</span>
+                                    @endif
+                                @else
+                                    <span class="badge badge-warning">Menunggu Konfirmasi</span>
+                                @endif
+                              </td>
 
-                                        @case(false)
-                                            <span class="badge badge-warning">Menunggu konfirmasi</span>
-                                        @break
-                                    @endswitch
-                                </td>
                                 <td>
                                     <a href="{{ route('admin.borrows.edit', $borrow) }}" class="btn btn-link">Edit</a>
 

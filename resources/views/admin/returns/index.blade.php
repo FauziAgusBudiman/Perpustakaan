@@ -7,7 +7,16 @@
                 </div>
             @endif
 
+            <div class="mb-3 d-flex gap-4">
+                <a href="{{ route('admin.returns.exportExcel') }}" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
+                <a href="{{ route('admin.returns.exportPdf') }}" class="btn btn-danger ml-2" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </a>
+            </div>
             <x-admin.search url="{{ route('admin.returns.index') }}" placeholder="Cari pengembalian..." />
+
 
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -15,7 +24,10 @@
                         <tr>
                             <th>Buku</th>
                             <th>Peminjam</th>
+                            <th>Durasi Peminjaman</th>
+                            <th>Tanggal Peminjaman</th>
                             <th>Tanggal Pengembalian</th>
+                            <th>Denda</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -29,7 +41,12 @@
                                     <span class="ml-3">{{ $restore->book->title }}</span>
                                 </td>
                                 <td>{{ $restore->user->name }}</td>
+                                <td>{{ $restore->borrow->duration }} Hari</td>
+                                <td>{{ $restore->borrow->borrowed_at->locale('id_ID')->isoFormat('LL') }}</td>
                                 <td>{{ $restore->returned_at->locale('id_ID')->isoFormat('LL') }}</td>
+                                <td>{{ $restore->fine ? $restore->fine : '-' }}</td>
+
+
                                 <td>
                                     @switch($restore->status)
                                         @case(\App\Models\Restore::STATUSES['Returned'])
@@ -47,8 +64,13 @@
                                         @case(\App\Models\Restore::STATUSES['Fine not paid'])
                                             <span class="badge badge-dark">{{ $restore->status }}</span>
                                         @break
+                                         @case(\App\Models\Restore::STATUSES['Fine paid'])
+                                            <span class="badge badge-success">{{ $restore->status }}</span>
+                                        @break
                                     @endswitch
                                 </td>
+                                
+
                                 <td>
                                     <a href="{{ route('admin.returns.edit', $restore) }}" class="btn btn-link">Edit</a>
 
