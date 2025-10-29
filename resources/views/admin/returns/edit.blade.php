@@ -63,8 +63,8 @@
                         @break
 
                         @case(\App\Models\Restore::STATUSES['Past due'])
-                            <input type="hidden" name="confirmation" value="0">
-                            <button type="submit" class="btn btn-danger mx-3">Beri denda</button>
+                            <input type="hidden" name="confirmation" value="1">
+                            <button type="submit" class="btn btn-danger mx-3"> Konfirmasi</button>
                         @break
                     @endswitch
 

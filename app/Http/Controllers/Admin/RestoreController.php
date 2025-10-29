@@ -46,7 +46,7 @@ class RestoreController extends Controller
         ]);
     }
 
-   public function update(Request $request, $id)
+public function update(Request $request, $id)
 {
     $restore = Restore::query()->findOrFail($id);
 
@@ -56,44 +56,34 @@ class RestoreController extends Controller
 
     $borrow = $restore->borrow;
 
-    $dueDate = Carbon::parse($borrow->borrowed_at)->addDays($borrow->duration)->startOfDay();
-    $returnedAt = Carbon::parse($restore->returned_at)->startOfDay();
+    // // Hitung tanggal jatuh tempo dan tanggal dikembalikan
+    // $dueDate = Carbon::parse($borrow->borrowed_at)->addDays($borrow->duration)->startOfDay();
+    // $returnedAt = Carbon::parse($restore->returned_at)->startOfDay();
 
-    $isLate = $returnedAt->gt($dueDate);
+    // Ambil model buku
+    $book = $restore->book;
 
-    // Inisialisasi totalFine supaya tidak undefined
-    $totalFine = 0;
+    // Tambah stok buku sesuai jumlah yang dikembalikan
+    $book->increment('amount', $borrow->amount);
 
-        $restore->book()->increment('amount', $borrow->amount);
-        $data['status'] = Restore::STATUSES['Returned'];
+    // ✅ Perbarui status buku berdasarkan stok terbaru
+    if ($book->amount > 0) {
+        $book->update(['status' => 'Tersedia']);
+    } else {
+        $book->update(['status' => 'Habis']);
+    }
 
-        if ($isLate) {
-            $lateDays = $dueDate->diffInDays($returnedAt);
-            $finePerDay = 1000;
-            $totalFine = $lateDays * $finePerDay;
+    // Tandai pengembalian sudah selesai
+    $data['status'] = Restore::STATUSES['Returned'];
 
-            Fine::create([
-                'borrow_id' => $borrow->id,
-                'user_id' => $borrow->user_id,
-                'days_late' => $lateDays,
-                'amount' => $totalFine,
-                'is_paid' => false,
-            ]);
-
-            $data['status'] = Restore::STATUSES['Past due'];
-            // $data['status'] = Restore::STATUSES['Fine not paid'];
-        }
-   
-    
-
+    // Simpan perubahan restore
     $restore->update($data);
 
     return redirect()
         ->route('admin.returns.index')
-        ->with('success', $isLate
-            ? "Berhasil memproses pengembalian. Denda keterlambatan: Rp" . number_format($totalFine, 0, ',', '.')
-            : "Berhasil mengonfirmasi pengembalian tanpa denda.");
+        ->with('success', 'Pengembalian buku berhasil diproses dan status buku diperbarui.');
 }
+
 
 
     public function destroy($id)

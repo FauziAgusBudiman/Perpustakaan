@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('returns/export-excel', [RestoreController::class, 'exportExcel'])->name('admin.returns.exportExcel');
     Route::get('returns/export-pdf', [RestoreController::class, 'exportPdf'])->name('admin.returns.exportPdf');
    
+Route::get('/borrows/notify-due', [BorrowController::class, 'notifyDueDate'])
+    ->name('admin.borrows.notify');
 
     Route::middleware('superuser')->prefix('/admin')->name('admin.')->group(function () {
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');

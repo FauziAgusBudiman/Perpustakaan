@@ -41,46 +41,46 @@ class MyBookController extends Controller
         ]);
     }
 
-        public function store(Request $request, Book $book)
-        {
-            $request->validate([
-                'duration' => ['required', 'numeric'],
-                'amount' => ['required', 'numeric', 'max:' . $book->amount],
-            ]);
+        // public function store(Request $request, Book $book)
+        // {
+        //     $request->validate([
+        //         'duration' => ['required', 'numeric'],
+        //         'amount' => ['required', 'numeric', 'max:' . $book->amount],
+        //     ]);
 
-            Borrow::create([
-                'borrowed_at' => now(),
-                'duration' => $request->duration,
-                'amount' => $request->amount,
-                'confirmation' => false,
-                'book_id' => $book->id,
-                'user_id' => Auth::id(),
-            ]);
+        //     Borrow::create([
+        //         'borrowed_at' => now(),
+        //         'duration' => $request->duration,
+        //         'amount' => $request->amount,
+        //         'confirmation' => false,
+        //         'book_id' => $book->id,
+        //         'user_id' => Auth::id(),
+        //     ]);
 
-            return redirect()->route('my-books.index')->with('success', 'Berhasil mengajukan peminjaman!');
-        }
+        //     return redirect()->route('my-books.index')->with('success', 'Berhasil mengajukan peminjaman!');
+        // }
 
 //     //test denda
-//     public function store(Request $request, Book $book)
-// {
-//     $request->validate([
-//         'duration' => ['required', 'numeric'],
-//         'amount' => ['required', 'numeric', 'max:' . $book->amount],
-//     ]);
+    public function store(Request $request, Book $book)
+{
+    $request->validate([
+        'duration' => ['required', 'numeric'],
+        'amount' => ['required', 'numeric', 'max:' . $book->amount],
+    ]);
 
-//     Borrow::create([
-//         // Ganti tanggal sekarang dengan 15 Oktober 2025
-//         'borrowed_at' => Carbon::parse('2025-10-15 10:00:00'), 
-//         'duration' => $request->duration,
-//         'amount' => $request->amount,
-//         'confirmation' => false,
-//         'book_id' => $book->id,
-//         'user_id' => Auth::id(),
-//     ]);
+    Borrow::create([
+        // Ganti tanggal sekarang dengan 15 Oktober 2025
+        'borrowed_at' => Carbon::parse('2025-10-15 10:00:00'), 
+        'duration' => $request->duration,
+        'amount' => $request->amount,
+        'confirmation' => false,
+        'book_id' => $book->id,
+        'user_id' => Auth::id(),
+    ]);
 
-//     return redirect()->route('my-books.index')
-//         ->with('success', 'Berhasil mengajukan peminjaman dengan tanggal 15 Oktober!');
-// }
+    return redirect()->route('my-books.index')
+        ->with('success', 'Berhasil mengajukan peminjaman dengan tanggal 15 Oktober!');
+}
 
     public function update($id)
 {
@@ -102,10 +102,10 @@ class MyBookController extends Controller
         : Restore::STATUSES['Not confirmed'];
 
 
-   $lateDays = $isLate
-    ? $dueDate->startOfDay()->diffInDays(now()->startOfDay()): 0;
-    $finePerDay = 1000;
-    $totalFine = $lateDays * $finePerDay;
+//    $lateDays = $isLate
+//     ? $dueDate->startOfDay()->diffInDays(now()->startOfDay()): 0;
+//     $finePerDay = 1000;
+//     $totalFine = $lateDays * $finePerDay;
 
 
     // Simpan data pengembalian
@@ -116,14 +116,15 @@ class MyBookController extends Controller
         'book_id' => $borrow->book_id,
         'user_id' => Auth::id(),
         'borrow_id' => $borrow->id,
-        'fine' => $totalFine,
+        // 'fine' => $totalFine,
     ]);
 
     return redirect()
         ->route('my-books.index')
-        ->with('success', $isLate
-            ? "Berhasil mengajukan pengembalian. Terlambat $lateDays hari. Denda Rp" . number_format($totalFine, 0, ',', '.')
-            : "Berhasil mengajukan pengembalian tanpa denda.");
+        ->with('success', 
+        // $isLate
+            // ? "Berhasil mengajukan pengembalian. Terlambat $lateDays hari. Denda Rp" . number_format($totalFine, 0, ',', '.')
+             "Berhasil mengajukan pengembalian tanpa denda.");
 }
 
 

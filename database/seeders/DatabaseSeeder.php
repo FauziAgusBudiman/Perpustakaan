@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
                 'gender' => User::GENDERS['Woman'],
             ]);
 
-            $bookIds = Book::factory(6)->create()->pluck('id');
+            // $bookIds = Book::factory(6)->create()->pluck('id');
 
         //     $borrowCount = count($bookIds);
         //     foreach ($bookIds as $bookId) {

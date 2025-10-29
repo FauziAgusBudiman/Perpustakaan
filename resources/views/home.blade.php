@@ -27,13 +27,15 @@
                     @foreach ($popularBooks as $popularBook)
                         <div class="col">
                             <a href="{{ route('preview', $popularBook) }}" class="text-decoration-none text-dark">
-                                <div class="card border-0 shadow-sm h-100 hover-shadow transition">
-                                    <img src="{{ isset($popularBook->cover) ? asset('storage/' . $popularBook->cover) : asset('storage/placeholder.png') }}"
-                                        alt="{{ $popularBook->title }}" class="card-img-top rounded-top">
+                                <div class="card border-0 shadow-sm book-card h-100">
+                                    <div class="book-cover-wrapper">
+                                        <img src="{{ isset($popularBook->cover) ? asset('storage/' . $popularBook->cover) : asset('storage/placeholder.png') }}"
+                                            alt="{{ $popularBook->title }}" class="book-cover">
+                                    </div>
                                     <div class="card-body text-center">
-                                        <h5 class="fw-bold mb-2">{{ $popularBook->title }}</h5>
-                                        <span class="text-muted small">Dipinjam
-                                            <span class="fw-semibold text-primary">{{ $popularBook->borrows_count }}</span> kali
+                                        <h6 class="fw-bold book-title">{{ $popularBook->title }}</h6>
+                                        <span class="text-muted small">
+                                            Dipinjam <span class="fw-semibold text-primary">{{ $popularBook->borrows_count }}</span> kali
                                         </span>
                                     </div>
                                 </div>
@@ -57,11 +59,13 @@
                     @foreach ($newestBooks as $newestBook)
                         <div class="col">
                             <a href="{{ route('preview', $newestBook) }}" class="text-decoration-none text-dark">
-                                <div class="card border-0 shadow-sm h-100 hover-shadow transition">
-                                    <img src="{{ isset($newestBook->cover) ? asset('storage/' . $newestBook->cover) : asset('storage/placeholder.png') }}"
-                                        alt="{{ $newestBook->title }}" class="card-img-top rounded-top">
+                                <div class="card border-0 shadow-sm book-card h-100">
+                                    <div class="book-cover-wrapper">
+                                        <img src="{{ isset($newestBook->cover) ? asset('storage/' . $newestBook->cover) : asset('storage/placeholder.png') }}"
+                                            alt="{{ $newestBook->title }}" class="book-cover">
+                                    </div>
                                     <div class="card-body text-center">
-                                        <h5 class="fw-bold mb-2">{{ $newestBook->title }}</h5>
+                                        <h6 class="fw-bold book-title">{{ $newestBook->title }}</h6>
                                         <span class="text-muted small">
                                             Terbit {{ $newestBook->created_at->locale('id_ID')->diffForHumans() }}
                                         </span>
@@ -75,14 +79,41 @@
         </div>
     </section>
 
-    {{-- CSS tambahan --}}
+    {{-- CSS TAMBAHAN --}}
     <style>
-        .hover-shadow:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        .book-card {
+            transition: 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
         }
-        .transition {
-            transition: all 0.3s ease-in-out;
+
+        .book-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+        }
+
+        .book-cover-wrapper {
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-title {
+            font-size: 15px;
+            min-height: 40px;
+            margin-bottom: 6px;
+            line-height: 1.3;
         }
     </style>
 </x-app-layout>

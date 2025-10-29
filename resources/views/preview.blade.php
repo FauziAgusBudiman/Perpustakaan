@@ -36,7 +36,7 @@
                             <div>
                                 <label for="duration">Durasi</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" name="duration" value="{{ old('duration') }}">
+                                    <input type="number" class="form-control" name="duration" value="duration">
                                     <span class="input-group-text">hari</span>
                                 </div>
                                 @error('duration')
