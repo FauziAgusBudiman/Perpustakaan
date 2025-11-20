@@ -41,46 +41,37 @@ class MyBookController extends Controller
         ]);
     }
 
-        // public function store(Request $request, Book $book)
-        // {
-        //     $request->validate([
-        //         'duration' => ['required', 'numeric'],
-        //         'amount' => ['required', 'numeric', 'max:' . $book->amount],
-        //     ]);
-
-        //     Borrow::create([
-        //         'borrowed_at' => now(),
-        //         'duration' => $request->duration,
-        //         'amount' => $request->amount,
-        //         'confirmation' => false,
-        //         'book_id' => $book->id,
-        //         'user_id' => Auth::id(),
-        //     ]);
-
-        //     return redirect()->route('my-books.index')->with('success', 'Berhasil mengajukan peminjaman!');
-        // }
-
-//     //test denda
-    public function store(Request $request, Book $book)
+public function store(Request $request, Book $book)
 {
+    $totalBorrow = Borrow::where('user_id', Auth::id())
+        ->where('confirmation', false) // masih dipinjam
+        ->count();
+
+    if ($totalBorrow >= 3) {
+       return redirect()->route('my-books.index')->with('success', 'Anda sudah mencapai batas peminjaman!');
+
+    }
+
     $request->validate([
-        'duration' => ['required', 'numeric'],
         'amount' => ['required', 'numeric', 'max:' . $book->amount],
     ]);
 
     Borrow::create([
-        // Ganti tanggal sekarang dengan 15 Oktober 2025
-        'borrowed_at' => Carbon::parse('2025-10-15 10:00:00'), 
-        'duration' => $request->duration,
-        'amount' => $request->amount,
+        'borrowed_at' => Carbon::parse('2025-10-15 10:00:00'),
+        'borrowed_at' => Carbon::now(),
+        'duration' => 3,
+        'amount' => 1,
         'confirmation' => false,
         'book_id' => $book->id,
         'user_id' => Auth::id(),
     ]);
 
     return redirect()->route('my-books.index')
-        ->with('success', 'Berhasil mengajukan peminjaman dengan tanggal 15 Oktober!');
+        ->with('success', 'Berhasil mengajukan peminjaman dengan tanggal 15 Oktober 2025!');
 }
+
+
+
 
     public function update($id)
 {

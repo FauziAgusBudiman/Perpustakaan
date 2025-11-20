@@ -46,7 +46,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'number' => 'The provided credentials do not match our records.',
+            'number' => 'Nomer Pengguna atau Kata Sandi yang Anda masukkan tidak cocok.',
+
         ])->onlyInput('number');
     }
 

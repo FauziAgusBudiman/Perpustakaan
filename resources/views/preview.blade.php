@@ -6,6 +6,7 @@
                     src="{{ isset($book->cover) ? asset('storage/' . $book->cover) : asset('storage/placeholder.png') }}"
                     alt="{{ $book->title }}" />
             </div>
+
             <div class="col">
                 <div class="d-flex align-items-center">
                     <h1 class="m-0 fw-bold">{{ $book->title }} ({{ $book->publish_year }})</h1>
@@ -22,6 +23,9 @@
                 <h2 class="my-3 fs-5">
                     Jumlah tersedia: <span class="fw-bold">{{ $book->amount }} buku</span>
                 </h2>
+                   <h2 class="my-3 fs-5">
+                   Maximal Pinjam <span class="fw-bold">3 hari</span>
+                </h2>
 
                 <div class="mt-5">
                     {!! $book->synopsis !!}
@@ -30,39 +34,44 @@
                 @if (auth()->check())
                     <form class="my-5" action="{{ route('my-books.store', $book) }}" method="POST">
                         @csrf
-                        @method('POST')
-                        
-                        <div class="row row-cols-1 row-cols-lg-2 mb-3">
-                            <div>
-                                <label for="duration">Durasi</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="duration" value="duration">
-                                    <span class="input-group-text">hari</span>
-                                </div>
-                                @error('duration')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="amount">Jumlah Buku (maks: {{ $book->amount }} buku)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="amount" value="{{ old('amount') }}">
-                                    <span class="input-group-text">buku</span>
-                                </div>
-                                @error('amount')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+
+                        <div class="row mb-3">
+
+                            {{-- Hidden durasi (tanggal kembali = hari ini + 3) --}}
+                      
+                            {{-- Hidden jumlah buku (selalu 1) --}}
+                            <input type="hidden" name="amount" value="1">
+
+                            @error('duration')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            @error('amount')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg d-block mx-auto px-5">Pinjam
-                            Buku</button>
+
+                        <button type="submit" class="btn btn-primary btn-lg d-block mx-auto px-5">Pinjam Buku</button>
                     </form>
+                    @if (session('limitError'))
+                    <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Peminjaman Ditolak',
+                        text: '{{ session("limitError") }}',
+                    });
+                    </script>
+                    @endif
+
+
                 @elseif ($book->amount > 0)
-                    <button type="button" class="btn btn-outline-secondary btn-lg d-block mx-auto px-5 my-5"
-                        disabled>Anda harus login untuk bisa meminjam</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg d-block mx-auto px-5 my-5" disabled>
+                        Anda harus login untuk bisa meminjam
+                    </button>
                 @else
-                    <button type="button" class="btn btn-outline-secondary btn-lg d-block mx-auto px-5 my-5"
-                        disabled>Buku tidak tersedia</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg d-block mx-auto px-5 my-5" disabled>
+                        Buku tidak tersedia
+                    </button>
                 @endif
             </div>
         </div>

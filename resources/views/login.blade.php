@@ -22,7 +22,7 @@
 
                 <!-- Nomor Anggota -->
                 <div>
-                    <label for="number" class="form-label fw-semibold">Nomor Siswa</label>
+                    <label for="number" class="form-label fw-semibold">Nomer Pengguna (NIS,NIP)</label>
                     <input type="number" name="number" id="number" class="form-control form-control-lg"
                         placeholder="Masukkan nomor anggota" value="{{ old('number') }}" required>
                     @error('number')
