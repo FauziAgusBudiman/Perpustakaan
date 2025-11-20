@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Borrow;
 use App\Models\Fine;
+use App\Models\Restore;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 
@@ -52,7 +54,16 @@ class BorrowController extends Controller
         if (!$borrow->confirmation) {
             $borrow->book()->decrement('amount', $borrow->amount);
         }
-
+   // Simpan data pengembalian
+            Restore::create([
+                'returned_at' => now(),
+                'status' => Restore::STATUSES['Not confirmed'],
+                'confirmation' => false, // belum dikonfirmasi admin
+                'book_id' => $borrow->book_id,
+                'user_id' => Auth::id(),
+                'borrow_id' => $borrow->id,
+                'fine' => null,
+            ]);
         $borrow->update($data);
 
         return redirect()
@@ -68,11 +79,18 @@ class BorrowController extends Controller
             ->route('admin.borrows.index')
             ->with('success', 'Berhasil menghapus peminjaman.');
     }
-public function denda()
-{
-    $borrows = \App\Models\Borrow::with(['user', 'book'])
-        ->where('confirmation', 1)
-        ->get();
+    public function denda()
+    {
+       $borrows = Borrow::with(['user', 'book', 'restore'])
+            ->where('confirmation', 1)
+            ->whereHas('restore', function ($query) {
+                $query->whereIn('status', [
+                    'Belum dikonfirmasi',
+                    'Terlambat'
+                ]);
+            })
+            ->get();
+
 
     foreach ($borrows as $borrow) {
         $borrowDate = \Carbon\Carbon::parse($borrow->borrowed_at);
