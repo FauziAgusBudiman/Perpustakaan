@@ -40,25 +40,38 @@ class MyBookController extends Controller
             'recentBorrows' => $recentBorrows,
         ]);
     }
-
 public function store(Request $request, Book $book)
 {
+    // Batas peminjaman 3 buku
     $totalBorrow = Borrow::where('user_id', Auth::id())
-        ->where('confirmation', false) // masih dipinjam
+        ->where('confirmation', false)
         ->count();
 
     if ($totalBorrow >= 3) {
-       return redirect()->route('my-books.index')->with('success', 'Anda sudah mencapai batas peminjaman!');
-
+        return redirect()->route('my-books.index')
+            ->with('success', 'Anda sudah mencapai batas peminjaman!');
     }
 
+    $alreadyBorrowed = Borrow::where('user_id', Auth::id())
+        ->where('book_id', $book->id)
+        ->where('confirmation', false) 
+        ->exists();
+
+    if ($alreadyBorrowed) {
+        return redirect()->route('my-books.index')
+            ->with('success', 'Anda sudah meminjam buku ini dan belum mengembalikannya!');
+    }
+
+    // Validasi jumlah
     $request->validate([
         'amount' => ['required', 'numeric', 'max:' . $book->amount],
     ]);
 
+    // Simpan peminjaman
     Borrow::create([
-        'borrowed_at' => Carbon::parse('2025-10-15 10:00:00'),
-        'borrowed_at' => Carbon::now(),
+        // jadwal test
+        'borrowed_at' => Carbon::parse('2025-11-22 10:00:00'),
+        // 'borrowed_at' => Carbon::now(),
         'duration' => 3,
         'amount' => 1,
         'confirmation' => false,
@@ -67,8 +80,9 @@ public function store(Request $request, Book $book)
     ]);
 
     return redirect()->route('my-books.index')
-        ->with('success', 'Berhasil mengajukan peminjaman dengan tanggal 15 Oktober 2025!');
+        ->with('success', 'Berhasil mengajukan peminjaman');
 }
+
 
 
 

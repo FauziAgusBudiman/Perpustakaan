@@ -37,8 +37,7 @@
 
             @if ($currentBorrows->isEmpty())
                 <div class="text-center text-muted py-5">
-                    <img src="{{ asset('storage/placeholder.png') }}" alt="Tidak ada pinjaman" width="180" class="mb-3 opacity-75">
-                    <p>Belum ada buku yang sedang kamu pinjam.</p>
+                    <p class="fs-5 fw-semibold">Belum ada buku yang sedang kamu pinjam.</p>
                 </div>
             @else
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -52,7 +51,7 @@
 
                                 <div class="card-body text-center">
                                     <h5 class="fw-bold text-primary mb-1">{{ $currentBorrow->book->title }}</h5>
-                                    <p class="text-muted small mb-2">✍️ {{ $currentBorrow->book->author ?? 'Tidak diketahui' }}</p>
+                                    <!-- <p class="text-muted small mb-2">✍️ {{ $currentBorrow->book->author ?? 'Tidak diketahui' }}</p> -->
 
                                     {{-- Tenggat --}}
                                     @php
@@ -75,11 +74,13 @@
                                                 @case(\App\Models\Restore::STATUSES['Past due'])
                                                     <span class="badge bg-secondary">Menunggu konfirmasi pengembalian</span>
                                                     @break
+
                                                 @case(\App\Models\Restore::STATUSES['Fine not paid'])
                                                     <span class="badge bg-danger">
                                                         Denda: Rp{{ number_format($currentBorrow->restore->fine, 0, ',', '.') }},-
                                                     </span>
                                                     @break
+
                                                 @default
                                                     <form action="{{ route('my-books.update', $currentBorrow) }}" method="POST"
                                                         onsubmit="return confirm('Anda yakin ingin mengembalikan buku ini?')">
@@ -113,8 +114,7 @@
 
             @if ($recentBorrows->isEmpty())
                 <div class="text-center text-muted py-5">
-                    <img src="{{ asset('storage/placeholder.png') }}" alt="Tidak ada riwayat" width="180" class="mb-3 opacity-75">
-                    <p>Belum ada riwayat peminjaman buku.</p>
+                    <p class="fs-5 fw-semibold">Belum ada riwayat peminjaman buku.</p>
                 </div>
             @else
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -125,9 +125,10 @@
                                     <img src="{{ $recentBorrow->book->cover ? asset('storage/' . $recentBorrow->book->cover) : asset('storage/placeholder.png') }}"
                                         alt="{{ $recentBorrow->book->title }}" class="book-cover rounded-top-3">
                                 </div>
+
                                 <div class="card-body text-center">
                                     <h5 class="fw-bold text-success mb-1">{{ $recentBorrow->book->title }}</h5>
-                                    <p class="text-muted small mb-2">✍️ {{ $recentBorrow->book->author ?? 'Tidak diketahui' }}</p>
+                                    <!-- <p class="text-muted small mb-2">✍️ {{ $recentBorrow->book->author ?? 'Tidak diketahui' }}</p> -->
                                     <p class="text-secondary small">
                                         Dikembalikan pada:
                                         <span class="fw-semibold text-dark">

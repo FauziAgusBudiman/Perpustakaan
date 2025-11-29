@@ -1,5 +1,5 @@
 <x-guest-layout title="Register">
-    <a href="{{ route('home') }}" class="fw-bold fs-1 text-decoration-none text-black">Perpustakaan</a>
+    <a href="{{ route('home') }}" class="fw-bold fs-1 text-decoration-none text-black">Perpustakaan MTS Tanwiriyyah</a>
     <h3>Register</h3>
 
     <form action="{{ route('register') }}" method="POST"
@@ -17,16 +17,20 @@
         </div>
 
         <div class="w-100">
-            <label for="number_type" class="form-label">Tipe Nomor</label>
-            <select name="number_type" class="form-select" id="number_type" aria-label="Pilih tipe nomor">
-                @foreach (App\Models\User::NUMBER_TYPES as $numberType)
-                    <option @selected(old('number_type') === $numberType) value="{{ $numberType }}">{{ $numberType }}</option>
-                @endforeach
-            </select>
-            @error('number_type')
-                <small class="fs-6 text-danger">{{ $message }}</small>
-            @enderror
-        </div>
+    <label for="number_type" class="form-label">Tipe Nomor</label>
+
+    <input type="text"
+            name="number_type"
+            id="number_type"
+            class="form-control"
+            value="NIS"
+            readonly>
+
+    @error('number_type')
+        <small class="fs-6 text-danger">{{ $message }}</small>
+    @enderror
+</div>
+
 
         <div class="w-100">
             <label for="number" class="form-label">Nomor</label>
@@ -103,7 +107,7 @@
 
         <div class="w-100 d-grid mt-4">
             <button type="submit" class="btn btn-primary">
-                <span class="fs-5">Register</span>
+                <span class="fs-5">Daftar</span>
             </button>
         </div>
 

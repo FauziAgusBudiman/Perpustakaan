@@ -109,7 +109,7 @@ class BorrowController extends Controller
         // ⚙️ Jika sudah lewat jatuh tempo
         if ($daysRemaining < 0) {
             $daysLate = abs((int) $daysRemaining);
-            $fineAmount = $daysLate * 1000;
+            $fineAmount = $daysLate * 5000;
 
             // 🔍 Cek apakah sudah ada denda
             $existingFine = \App\Models\Fine::where('borrow_id', $borrow->id)->first();
@@ -162,9 +162,9 @@ class BorrowController extends Controller
         elseif ($daysRemaining <= 1 && $daysRemaining >= 0) {
             $message = "Halo {$user->name},\n\n"
                 . "📚 *Pengingat Pengembalian Buku*\n\n"
-                . "Buku *{$book->title}* akan jatuh tempo dalam *{$daysRemaining} hari* "
+                . "Buku *{$book->title}* akan jatuh tempo Besok* "
                 . "(tanggal pengembalian: {$dueDate->format('Y-m-d')}).\n\n"
-                . "Hindari denda sebesar *Rp 1000 per hari* dengan mengembalikan tepat waktu.\n\n"
+                . "Hindari denda sebesar *Rp 5000 per hari* dengan mengembalikan tepat waktu.\n\n"
                 . "Terima kasih 🙏\nAdmin Perpustakaan";
 
             $this->sendFonnteMessage($phone, $message);

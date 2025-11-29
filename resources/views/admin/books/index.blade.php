@@ -1,6 +1,7 @@
-<x-admin-layout title="List Buku">
+<x-admin-layout title="Daftar Buku">
     <div class="card shadow mb-4">
         <div class="card-body">
+
             @if ($success = session()->get('success'))
                 <div class="card border-left-success">
                     <div class="card-body">{!! $success !!}</div>
@@ -8,20 +9,18 @@
             @endif
 
             <div class="mb-3 d-flex gap-3 align-items-center">
-            <a href="{{ route('admin.books.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah
-            </a>
+                <a href="{{ route('admin.books.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Buku
+                </a>
 
-            <form action="{{ route('admin.books.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2 mb-0 ml-2">
-                @csrf
-                <input type="file" name="file" class="form-control" style="max-width: 270px;" required>
-                <button type="submit" class="btn btn-success ml-2">
-                    <i class="fas fa-file-excel"></i> Import Excel
-                </button>
-            </form>
-        </div>
-
-
+                <form action="{{ route('admin.books.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2 mb-0 ml-2">
+                    @csrf
+                    <input type="file" name="file" class="form-control" style="max-width: 270px;" required>
+                    <button type="submit" class="btn btn-success ml-2">
+                        <i class="fas fa-file-excel"></i> Import Excel
+                    </button>
+                </form>
+            </div>
 
             <x-admin.search url="{{ route('admin.books.index') }}" placeholder="Cari buku..." />
 
@@ -34,13 +33,13 @@
                             <th>Judul</th>
                             <th>Penulis</th>
                             <th>Penerbit</th>
-                            {{-- <th>No Rak</th> --}}
                             <th>Tahun Terbit</th>
                             <th>Jumlah Tersedia</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @forelse ($books as $book)
                             <tr>
@@ -48,52 +47,70 @@
                                     <img src="{{ isset($book->cover) ? asset('storage/' . $book->cover) : asset('storage/placeholder.png') }}"
                                         alt="{{ $book->title }}" class="rounded" style="width: 100px;">
                                 </td>
+
                                 <td>{{ $book->category }}</td>
                                 <td>{{ $book->title }}</td>
                                 <td>{{ $book->writer }}</td>
                                 <td>{{ $book->publisher }}</td>
-                                {{-- <td>{{ $book->rack_number ?? '-' }}</td> --}}
                                 <td>{{ $book->publish_year }}</td>
                                 <td>{{ $book->amount }} buku</td>
+
                                 <td>
                                     @switch($book->status)
                                         @case(\App\Models\Book::STATUSES['Available'])
                                             <span class="badge badge-success">Tersedia</span>
                                         @break
-
+                                        
+                                    @case(\App\Models\Book::STATUSES['Unavailable'])
+                                            <span class="badge badge-success">Tidak Tersedia</span>
+                                        @break
                                         @case(\App\Models\Book::STATUSES['Borrowed'])
                                             <span class="badge badge-warning">Dipinjam</span>
                                         @break
                                     @endswitch
                                 </td>
-                                <td>
-                                    <a href="{{ route('admin.books.edit', $book) }}"
-                                        class="btn btn-link">Edit</a>
-                                        <a href="{{ route('admin.books.show', $book) }}"
-                                          class="btn btn-link">Cetak Label</a>
 
+                                <td class="d-flex">
+
+                                    {{-- Tombol Edit --}}
+                                    <a href="{{ route('admin.books.edit', $book) }}"
+                                        class="btn btn-sm btn-outline-primary mx-1 d-flex align-items-center">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </a>
+
+                                    {{-- Tombol Cetak Label --}}
+                                    <a href="{{ route('admin.books.show', $book) }}"
+                                        class="btn btn-sm btn-outline-success mx-1 d-flex align-items-center">
+                                        <i class="bi bi-printer me-1"></i> Cetak Label
+                                    </a>
+
+                                    {{-- Tombol Hapus --}}
                                     <form action="{{ route('admin.books.destroy', $book) }}" method="POST"
-                                        onsubmit="return confirm('Anda yakin ingin menghapus buku ini?')">
+                                        onsubmit="return confirm('Anda yakin ingin menghapus buku ini?')" class="mx-1">
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit" class="btn btn-link text-danger">Hapus</button>
-                                        
+                                        <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center">
+                                            <i class="bi bi-trash me-1"></i> Hapus
+                                        </button>
                                     </form>
+
                                 </td>
                             </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-center">Tidak ada data</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
 
-                    <div class="mt-5">
-                        {{ $books->withQueryString()->links() }}
-                    </div>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center">Tidak ada data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+
+                <div class="mt-5">
+                    {{ $books->withQueryString()->links() }}
                 </div>
             </div>
+
         </div>
-    </x-admin-layout>
+    </div>
+</x-admin-layout>

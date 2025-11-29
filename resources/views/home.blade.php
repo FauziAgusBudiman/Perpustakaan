@@ -40,8 +40,8 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <h6 class="fw-bold book-title text-primary mb-1">{{ $popularBook->title }}</h6>
-                                        <p class="text-muted small mb-1">✍️ {{ $popularBook->author ?? 'Tidak diketahui' }}</p>
-                                        <p class="text-secondary small">
+                                        <!-- <p class="text-muted small mb-1">✍️ {{ $popularBook->author ?? 'Tidak diketahui' }}</p>
+                                        <p class="text-secondary small"> -->
                                             <!-- {{ Str::limit($popularBook->description ?? 'Belum ada sinopsis.', 80, '...') }} -->
                                         </p>
                                         <div class="text-muted small mt-2">
@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <h6 class="fw-bold book-title text-success mb-1">{{ $newestBook->title }}</h6>
-                                        <p class="text-muted small mb-1">✍️ {{ $newestBook->author ?? 'Tidak diketahui' }}</p>
+                                        <!-- <p class="text-muted small mb-1">✍️ {{ $newestBook->author ?? 'Tidak diketahui' }}</p> -->
                                         <p class="text-secondary small">
                                             <!-- {{ Str::limit($newestBook->description ?? 'Belum ada sinopsis.', 80, '...') }} -->
                                         </p>

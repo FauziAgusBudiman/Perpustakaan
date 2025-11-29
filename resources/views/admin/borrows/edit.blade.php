@@ -1,4 +1,4 @@
-<x-admin-layout title="Edit Peminjaman">
+<x-admin-layout title="Konfirmasi Peminjaman">
     <div class="card shadow mb-4">
         <div class="card-body">
             <form class="row" action="{{ route('admin.borrows.update', $borrow) }}" method="POST"

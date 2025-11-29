@@ -1,4 +1,4 @@
-<x-admin-layout title="List Pustakawan">
+<x-admin-layout title="Daftar Pustakawan">
     <div class="card shadow mb-4">
         <div class="card-body">
             @if($success = session()->get('success'))

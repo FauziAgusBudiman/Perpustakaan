@@ -15,7 +15,17 @@
             <div style="font-size: 13px; line-height: 1.3; word-wrap: break-word;">
                 <p><strong>No. Anggota:</strong> {{ $member->number_type }}{{ $member->number }}</p>
                 <p><strong>Nama:</strong> {{ Str::limit($member->name, 30, '...') }}</p>
-                <p><strong>Jenis Kelamin:</strong> {{ $member->gender ?? '-' }}</p>
+                <p>
+                    <strong>Jenis Kelamin:</strong> 
+                    @if ($member->gender == 'Men' || 'Laki-laki')
+                        Laki-laki
+                    @elseif ($member->gender == 'Women' || 'Perempuan')
+                        Perempuan
+                    @else
+                        -
+                    @endif
+                </p>
+
                 <p><strong>Telepon:</strong> +{{ $member->telephone }}</p>
                 <p><strong>Alamat:</strong> {{ Str::limit($member->address, 40, '...') }}</p>
             </div>

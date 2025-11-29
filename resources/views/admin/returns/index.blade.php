@@ -1,4 +1,4 @@
-<x-admin-layout title="List Pengembalian">
+<x-admin-layout title="Daftar Pengembalian">
     <div class="card shadow mb-4">
         <div class="card-body">
             @if ($success = session()->get('success'))
@@ -71,17 +71,29 @@
                                 </td>
                                 
 
-                                <td>
-                                    <a href="{{ route('admin.returns.edit', $restore) }}" class="btn btn-link">Edit</a>
+                                <td class="d-flex">
 
-                                    <form action="{{ route('admin.returns.destroy', $restore) }}" method="POST"
-                                        onsubmit="return confirm('Anda yakin ingin menghapus pengembalian ini?')">
-                                        @csrf
-                                        @method('DELETE')
+                                {{-- Tombol Edit --}}
+                                <a href="{{ route('admin.returns.edit', $restore) }}"
+                                class="btn btn-sm btn-outline-primary mx-1 d-flex align-items-center">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
+                                </a>
 
-                                        <button type="submit" class="btn btn-link text-danger">Hapus</button>
-                                    </form>
-                                </td>
+                                {{-- Tombol Hapus --}}
+                                <form action="{{ route('admin.returns.destroy', $restore) }}" method="POST"
+                                    onsubmit="return confirm('Anda yakin ingin menghapus pengembalian ini?')"
+                                    class="mx-1">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger d-flex align-items-center">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
+                                </form>
+
+                            </td>
+
                             </tr>
                             @empty
                                 <tr>
